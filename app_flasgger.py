@@ -15,20 +15,19 @@ def hello_get():
         type: string
         required: false
         default: World
-       - name: lastname
-        in: query
-        type: string
-        required: false
-        default: World          
     responses:
       200:
         description: A greeting message
     """
     name = request.args.get('name', 'World')
-    lastname = request.args.get('lastname', 'no last name provided')
-    nameCapital = name.upper()
-    lastnameCapital = lastname.upper()
-    return jsonify({'message': f'Hello {nameCapital} {lastnameCapital}!'})
+    return f'Hello {name}!'
+
+    data = request.get_json()
+    if data is None:
+        return jsonify({'error': 'Invalid JSON'}), 400
+    
+    name = data.get('name', 'World')
+    return jsonify({'message': f'Hello {name}!'})
 
 if __name__ == '__main__':
     app.run(debug=True)
